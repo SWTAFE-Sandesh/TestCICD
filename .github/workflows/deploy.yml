@@ -24,7 +24,7 @@ jobs:
                       -dest:auto,computerName="DESKTOP-QL56SEK",username="SWTAFE",password="SWTAFE2024",authType="Basic" `
                       -allowUntrusted
       env:
-        DEPLOY_PATH: "C:\www\ActionTest\TestCICD"
+        DEPLOY_PATH: "C:/www/ActionTest/TestCICD"
 
     # Step 3: Restart IIS to apply the changes (if needed)
     - name: Restart IIS
