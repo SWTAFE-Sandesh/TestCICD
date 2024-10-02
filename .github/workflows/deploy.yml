@@ -19,12 +19,10 @@ jobs:
     - name: Deploy to IIS in VirtualBox
       run: |
         $ErrorActionPreference = "Stop"
-        .\msdeploy.exe -verb:sync `
+        & "C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync `
                       -source:contentPath="." `
                       -dest:contentPath="C:\www\ActionTest\TestCICD"
-      env:
-        DEPLOY_PATH: "C:\www\ActionTest\TestCICD"
-
+      
     # Step 3: Restart IIS to apply the changes (if needed)
     - name: Restart IIS
       run: |
