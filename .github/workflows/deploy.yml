@@ -1,0 +1,31 @@
+name: CI/CD - Deploy PHP Application to IIS in VirtualBox
+
+# Trigger the workflow on push to the main branch
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: windows-latest
+
+    steps:
+    # Step 1: Checkout the latest code from the repository
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # Step 2: Deploy the code to IIS in VirtualBox environment using MSDeploy
+    - name: Deploy to IIS in VirtualBox
+      run: |
+        $ErrorActionPreference = "Stop"
+        .\msdeploy.exe -verb:sync `
+                      -source:contentPath="." `
+                      -dest:contentPath="C:\www\ActionTest\TestCICD"
+      env:
+        DEPLOY_PATH: "C:\www\ActionTest\TestCICD"
+
+    # Step 3: Restart IIS to apply the changes (if needed)
+    - name: Restart IIS
+      run: |
+        iisreset
