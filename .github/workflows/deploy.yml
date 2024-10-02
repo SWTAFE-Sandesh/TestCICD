@@ -15,26 +15,16 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    # Step 2: Install MSDeploy (optional, if not already installed)
-    - name: Install MSDeploy
-      run: |
-        Install-WindowsFeature -Name Web-Server, Web-Mgmt-Service
-        $msdeployUrl = "https://download.microsoft.com/download/E/2/3/E234C7BC-9C3F-4E7D-8D50-FBC7847243FA/msdeploy.exe"
-        $msdeployPath = "$env:USERPROFILE/msdeploy.exe"
-        Invoke-WebRequest -Uri $msdeployUrl -OutFile $msdeployPath
-        Start-Process -FilePath $msdeployPath -ArgumentList "/quiet", "/passive" -Wait
-
-    # Step 3: Deploy the code to IIS in VirtualBox environment
+    # Step 2: Deploy the code to IIS in VirtualBox environment using MSDeploy
     - name: Deploy to IIS in VirtualBox
       run: |
         $ErrorActionPreference = "Stop"
-        .\msdeploy.exe -verb:sync `
+        & "C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync `
                       -source:contentPath="." `
-                      -dest:contentPath="C:\inetpub\wwwroot\your_site"
-      env:
-        DEPLOY_PATH: "C:\inetpub\wwwroot\your_site"
+                      -dest:contentPath="C:\inetpub\wwwroot\your_site",computerName="localhost",username="<your_username>",password="<your_password>",authType="Basic" `
+                      -allowUntrusted
 
-    # Step 4: Restart IIS to apply the changes (if needed)
+    # Step 3: Restart IIS to apply the changes (if needed)
     - name: Restart IIS
       run: |
         iisreset
